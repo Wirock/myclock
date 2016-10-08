@@ -122,8 +122,8 @@ function addBalls(x, y, num) {
                     x: x + j * 2 * (RADIUS + 1) + (RADIUS + 1),
                     y: y + i * 2 * (RADIUS + 1) + (RADIUS + 1),
                     g: 1.5 + Math.random(),
-                    vx: Math.pow(-1, Math.floor(Math.random() * 100)) * (2 + Math.random() * 4),
-                    vy: Math.pow(-1, Math.floor(Math.random() * 100)) * (2 + Math.random() * 4),
+                    vx:0,
+                    vy:5,
                     color: colors[Math.floor(Math.random() * colors.length)]
                 };
                 balls.push(ball);
@@ -140,8 +140,18 @@ function updateBalls() {
         balls[i].y += balls[i].vy;
         balls[i].vy += balls[i].g;
         if (balls[i].y >= canvas.height - RADIUS) {
-            balls[i].y = canvas.height - RADIUS;
-            balls[i].vy = -balls[i].vy * 0.75;
+            if(balls[i].vx==0){
+                //第一次落地
+                balls[i].vx=Math.pow(-1,parseInt(Math.random()*100))*(10+Math.random()*20);
+                balls[i].vy=-balls[i].vy * 0.75+Math.random()*5;
+            }else {
+                //落地减少横向速度，大于2才减，确保能跳出画布
+                if(balls[i].vx>2){
+                    balls[i].vx = balls[i].vx * 0.75;
+                }
+                balls[i].y = canvas.height - RADIUS;
+                balls[i].vy = -balls[i].vy * 0.75;
+            }
         }
         if (balls[i].y <= RADIUS) {
             balls[i].y = RADIUS;
